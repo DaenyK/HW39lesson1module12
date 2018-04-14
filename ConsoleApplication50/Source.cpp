@@ -61,6 +61,7 @@ void main()
 					printf("%d\t", mas[i]);
 					fprintf(fp, "%d\t", mas[i]);
 				}
+				printf("\nданные записаны в файл case1\n");
 			}
 
 			fclose(fp);
@@ -187,6 +188,76 @@ void main()
 				<< "два положительных, два отрица¬тельных и т.д. (предполагается, что число " << endl
 				<< "компонент в файле f делится на 4)\n\n";
 
+			FILE *fp = NULL;
+			FILE *fp1 = NULL;
+			FILE *fp2 = NULL;
+
+
+			int mas[10];
+			for (int i = 0; i < 5; i++)
+			{
+				mas[i] = 5 + rand() % 20;
+				printf("%d\t", mas[i]);
+			}
+			for (int i = 5; i < 10; i++)
+			{
+				mas[i] = -20 + rand() % 20;
+				printf("%d\t", mas[i]);
+			}
+			printf("\n");
+
+			if ((fp = fopen("case4.txt", "w")) != NULL)
+			{
+				for (int i = 0; i < 10; i++)
+					fprintf(fp, "%d\t", mas[i]);
+			}
+			fclose(fp);
+
+			if (((fp = fopen("case4.txt", "r")) != NULL))
+			{
+				printf("Файл открыт\n");
+				for (int i = 0; i < 10; i++)
+				{
+					fscanf(fp, "%d", &mas[i]);
+					/*printf("%d\t", mas[i]);*/
+				}
+				if (((fp1 = fopen("case4_h.txt", "w")) != NULL) && ((fp2 = fopen("case4_hh.txt", "w")) != NULL))
+				{
+					printf("Файлы открыты\n");
+					for (int i = 0; i < 10; i++)
+					{
+						if (mas[i] < 0)
+							fprintf(fp1, "%d\t", mas[i]);
+						else
+							fprintf(fp2, "%d\t", mas[i]);
+					}
+					fclose(fp1);
+					fclose(fp2);
+					if (((fp1 = fopen("case4_h.txt", "r")) != NULL) && ((fp2 = fopen("case4_hh.txt", "a+")) != NULL))
+					{
+						printf("Файлы открыты\n");
+						for (int i = 0; i < 5; i++)
+						{
+							fscanf(fp1, "%d", &mas[i]);
+							/*printf("%d\t", mas[i]);*/
+						}
+						for (int i = 0; i < 5; i++)
+						{
+							fprintf(fp2, "%d\t", mas[i]);
+						}
+					}
+					fclose(fp1);
+					fclose(fp2);
+
+				}
+			}
+			else
+			{
+				printf("Файл не открыт\n");
+				exit(1);
+			}
+
+
 		}break;
 
 		case 5:
@@ -195,7 +266,52 @@ void main()
 				<< "— отдельное слово. Рассмотреть два варианта" << endl
 				<< "a.известно, что в существующем файле записаны 12 слов" << endl
 				<< "b.размер существующего файла неизвестен\n\n";
-			cout << "что-то не поняла задание: надо было просто вывести на экран то, что записано в файле?о.о\n";
+			FILE *fp = NULL;
+			FILE *fp1 = NULL;
+
+			char *mas = "hello to everyone who reads this sentence hope you are doing well";
+			
+			if ((fp = fopen("case5.txt", "w")) != NULL)
+			{
+				fprintf(fp, "%s", mas);
+				printf("файл записан в сase5\n");
+			}
+			else
+			{
+				printf("error\n");
+				EXIT_FAILURE;
+			}
+			fclose(fp);
+
+			char newMas[12][20];
+			if ((fp = fopen("case5.txt", "r")) != NULL)
+			{
+				for (int i = 0; i < 12; i++)
+				{
+					fscanf(fp, "%s", &newMas[i]);
+				}
+			}
+			else
+			{
+				printf("error\n");
+				EXIT_FAILURE;
+			}
+			fclose(fp);
+
+			if ((fp1 = fopen("newCase5.txt", "w")) != NULL)
+			{
+				for (int i = 0; i < 12; i++)
+				{
+					fprintf(fp1, "%s\n", newMas[i]);
+				}
+				printf("\nновый файл записан в newCase5\n");
+			}
+			else
+			{
+				printf("error\n");
+				EXIT_FAILURE;
+			}
+			fclose(fp1);
 		}break;
 
 		case 6:
@@ -243,7 +359,9 @@ void main()
 						if (word[i] == newStr[i])
 							i++;
 						else
+						{
 							printf("это не то слово\n"); break;
+						}
 					}
 					if (i == 4)
 					{
@@ -317,6 +435,7 @@ void main()
 
 				} while (c != lenght);
 */
+				printf("\nслова, начинающиеся на букву с, и считанные с файла case7\n");
 				char mas[len];
 				for (int i = 0; i < lenght; i++)
 				{
@@ -333,13 +452,13 @@ void main()
 						i = j;
 					}
 
-					else if(mas[i]=='c'&&mas[i-1]==' ')
+					else if (mas[i] == 'c'&&mas[i - 1] == ' ')
 					{
 						int k = i;
 						do {
 							printf("%c", mas[k]); k++;
 							mas[k] = getc(fp);
-						} while (mas[k] != ' '&&k!=lenght);
+						} while (mas[k] != ' '&&k != lenght);
 						printf("\n");
 						i = k;
 					}
@@ -347,21 +466,199 @@ void main()
 			}
 			fclose(fp);
 		}break;
-		}
-		SetConsoleTextAttribute(hConsole, (WORD)((0 << 4) | 15));
-		cout << "Хотите продолжить 1/0?";
-		cin >> q;
 
-
-		switch (q)
+		case 8:
 		{
-		case 1:
-			system("cls");
-			break;
-		default:
-			cout << "ошибка" << endl;
-		}
-	} while (nz > 0);
+			cout << "Имеется типизированный файл, в котором записаны 18 целых чисел." << endl
+				<< "Переписать все положительные числа файла в массив в том же порядке\n\n";
+			FILE *fp = NULL;
+			FILE *fp1 = NULL;
+
+			int mas[18];
+			printf("числа в первом файле:\n");
+			if ((fp = fopen("case8.txt", "w")) != NULL)
+			{
+				for (int i = 0; i < 18; i++)
+				{
+					mas[i] = -10 + rand() % 20;
+					printf("%d\t", mas[i]);
+					fprintf(fp, "%d\t", mas[i]);
+				}
+			}
+			else
+			{
+				printf("error\n");
+				exit(1);
+			}
+			fclose(fp);
+
+			int c;
+
+			if ((fp = fopen("case8.txt", "r")) != NULL)
+			{
+				if((fp1 = fopen("newCase8.txt", "w")) != NULL)
+			{
+				int j = 0;
+				for (int i = 0; i < 18; i++)
+				{
+					fscanf(fp, "%d", &mas[i]);
+					if(mas[i]<=0)
+						c = getc(fp);
+					else if (mas[i] > 0)
+					{
+						fprintf(fp1, "%d\t", mas[i]);
+						c = getc(fp);
+					}
+				}
+				printf("\nновый файл записан в newCase8\n");
+			}
+				else
+				{
+					printf("error\n");
+					exit(1);
+				}
+			}
+			fclose(fp1);
+		fclose(fp);
+		}break;
+
+		case 11:
+		{
+
+			cout << "Имеется типизированный файл, элементами которого являются отдельные буквы," << endl
+				<< "составляющие последовательность орпцессор. Получить новый файл, в котором " << endl
+				<< "буквы слова процессор будут расположены правильно\n\n";
+			FILE *fp = NULL;
+
+			if ((fp = fopen("case11.txt", "w")) == NULL)
+			{
+				printf("error\n");
+				exit(1);
+			}
+			else
+			{
+				char*str = "orpcessor";
+				fprintf(fp, "%s", str);
+				printf("набор букв, который присутвует в файле: %s\n", str);
+			}
+			fclose(fp);
+
+
+			if ((fp = fopen("case11.txt", "w")) == NULL)
+			{
+				printf("error\n");
+				exit(1);
+			}
+			else
+			{
+				int a;
+				char newStr[20] = " ";
+				char word[10] = "processor";
+				printf("вы знаете что это за слово?1/0");
+				scanf("%d", &a);
+				switch (a)
+				{
+				case 1:
+				{
+					printf("напишите его: ");
+					scanf("%s", newStr);
+
+					int  i = 0;
+					while (i != 9)
+					{
+						if (word[i] == newStr[i])
+							i++;
+						else
+						{
+							printf("это не то слово\n"); break;
+						}
+					}
+					if (i == 9)
+					{
+						printf("Вы угадали!\nхотите записать это в файл?1/0");
+						a = 0;
+						scanf("%d", &a);
+						switch (a)
+						{
+						case 1:
+						{
+							fprintf(fp, "%s", newStr);
+							printf("файл успешно записан\n");
+						}break;
+						case 0:
+						{
+							printf("файл не будет перезаписываться");
+						}break;
+						}
+					}
+				}break;
+
+				case 0:
+				{
+					printf("переходим к следующему заданию\n");
+				}break;
+				}
+			}
+			fclose(fp);
+		}break;
+
+		case 13:
+		{
+			cout << "Имеется файл с тридцатью числами."<<endl
+				<<"Записать в другой файл числа имеющегося файла в обратном порядке.\n\n";
+			FILE *fp = NULL;
+			FILE *fp1 = NULL;
+
+
+			int mas[10];
+			for (int i = 0; i < 30; i++)
+			{
+				mas[i] = 5 + rand() % 20;
+				printf("%d\t", mas[i]);
+			}
+			printf("\n");
+
+			if ((fp = fopen("case13.txt", "w")) != NULL)
+			{
+				for (int i = 0; i < 30; i++)
+					fprintf(fp, "%d\t", mas[i]);
+			}
+			fclose(fp);
+
+			if ((fp = fopen("case13.txt", "r")) != NULL)
+			{
+				for (int i = 0; i < 30; i++)
+				{
+					fscanf(fp, "%d", &mas[i]);
+					/*printf("%d\t", mas[i]);*/
+				}
+
+				if ((fp1 = fopen("case13_new.txt", "w")) != NULL)
+				{
+					for (int i = 29; i >= 0; i--)
+						fprintf(fp1, "%d\t", mas[i]);
+
+					printf("\nчисла записаны в обратном порядке в файл\n");
+				}
+				fclose(fp1);
+			}
+			fclose(fp);
+		}break;
+	}
+	SetConsoleTextAttribute(hConsole, (WORD)((0 << 4) | 15));
+	cout << "Хотите продолжить 1/0?";
+	cin >> q;
+
+
+	switch (q)
+	{
+	case 1:
+		system("cls");
+		break;
+	default:
+		cout << "ошибка" << endl;
+	}
+} while (nz > 0);
 
 
 }
